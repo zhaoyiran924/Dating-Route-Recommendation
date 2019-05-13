@@ -1,4 +1,4 @@
-#This code use Baidu_Map and addresses we searched to get the route of date and store in Baidu_Map.txt
+#This code use crawler and regular expression to get hotel on www.ctrip.com
 
 # -*- coding: utf-8 -*-
 import requests
