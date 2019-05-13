@@ -1,3 +1,6 @@
+#This code use addresses we get and get_map.py to get aggress metrix which contains the information
+#that distance between two locations.
+
 import numpy as np
 from get_Dazhong import get_resturant
 from get_movie import get_movie
@@ -13,19 +16,13 @@ import time
 import random
 import io
 
-# from get_JinWei import return_JW
-# from get_map import get_distance
-
 #设置不可以连通的矩阵距离
 distant = 100
 all_level = 5
 
 def return_JW(address):
-
     from urllib import parse
-
     #address = input("输入起点：")
-
     query = {
      'key' : 'f247cdb592eb43ebac6ccd27f796e2d2',
      'address': address,
@@ -33,7 +30,6 @@ def return_JW(address):
       }
     base = 'http://api.map.baidu.com/geocoder?'
     url = base+parse.urlencode(query)
-
     import urllib.request
     doc = urllib.request.urlopen(url)
     s = doc.read().decode('utf-8')
@@ -41,34 +37,20 @@ def return_JW(address):
     jsonData = json.loads(s)
     lat=jsonData['result']['location']['lat']
     lng =jsonData['result']['location']['lng']
-
     return lat,lng
 
 def get_distance(origin,destination):
     temp_url = "http://api.map.baidu.com/direction/v2/transit?origin={},{}&destination={},{}&ak=ClmC68V8M22O6lxjZSwdkW0kUYg1F7z3"
-
-    # origin = input("输入起点: ")
-    # destination = input("输入终点: ")
-
-
     lat_s,lng_s = return_JW(origin)
     lat_d,lng_d = return_JW(destination)
-
     url = temp_url.format(lat_s,lng_s,lat_d,lng_d)
-
     headers = {
     "Upgrade-Insecure-Requests" : "1",
     "User-Agent": "Mozilla/5.0 (Linux; Android 5.0; SM-G900P Build/LRX21T) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/71.0.3578.98 Mobile Safari/537.36"
     }
-
-
     response = requests.get(url, headers = headers)
     json_str = response.content.decode()
-
-
     distance = int(json.loads(json_str)['result']['routes'][0]['distance'])/ 1000
-
-
     return distance
 
 def xjbchu():
@@ -91,26 +73,15 @@ def follow(choose,master,id):
     }
     now_time = get_time()
     url = temp_url.format(id[int(sequence)-1],now_time)
-
-    # query_string = {
-    # "movieId": str(id[sequence]),
-    # "day": "2019-03-21"
-    # }
-
     price_movie = []
     for i in range(10):
         price = int(random.uniform(40,60))
         price_movie.append(price)
-
-
     new_response = requests.get(url,headers=headers)
     json_str = new_response.content.decode()
-
     ret = json.loads(json_str)['brand']['subItems']
-
     cinema = []
     total = 0
-
     with io.open("movie.txt","a",encoding="utf-8") as f:
         for element in ret:
             element_s = "上海"+element['name'] +  "  " + str(element['count'])
@@ -119,13 +90,8 @@ def follow(choose,master,id):
                 element_in = "上海"+element['name']
                 cinema.append(json.dumps(element_in,ensure_ascii=False))
                 total = total + 1
-
     print("finish follow")
-
-
     return cinema,price_movie,master
-
-
 
 #这里根据所有得到的距离生成需要的矩阵以及距离保存为.mat文件
 #保存的顺序为[get_Dazhong,get_movie,get_park,get_handwork,get_hotel]
@@ -145,7 +111,6 @@ def get_allmatrix(order,master):
     park,price_park = get_park()
     handwork, price_handwork = get_write_hand()
     hotel, price_hotel  = get_hotel()
-
     Dazhong_JW = []
     movie_JW = []
     park_JW = []
@@ -165,7 +130,6 @@ def get_allmatrix(order,master):
         handwork_JW.append(return_JW(handwork[i]))
         hotel_JW.append(return_JW(hotel[i]))
         #print(Dazhong[i]+movie[i]+park[i]+handwork[i]+hotel[i]+'finish')
-
     raw = []
     column = []
     raw_JW = []
@@ -179,28 +143,7 @@ def get_allmatrix(order,master):
     for i in range(len(raw)):
         for j in range(len(column)):
             all_matrix[i][j] = 100
-
-    # for i in range(len(raw)):
-    #     for j in range(len(column)):
-    #         #print(i,j)
-    #         if(i != j and raw[i]!=raw[j]):
-    #             #print(raw[i],column[j])
-    #             try:
-    #                 all_matrix[i][j] = get_distance(raw[i],raw[j])
-    #             #print(all_matrix[i][j])
-    #             except:
-    #                 all_matrix[i][j] = 100
-    #                 print("fail")
-    #     print(raw[i]+"finish")
-    #
-    # print(all_matrix)
-    # fp = open("metrix.txt","w+")
-    # for item in all_matrix:
-    #     fp.write(str(item)+"\n")
-    # fp.close()
     return all_matrix,raw,price_raw,movie,movie_we
-
-
 
 #这里根据生成的所有矩阵和提出的需求自动生成计算矩阵
 #matrix是60*60，order是数组，保存了用户选择的顺序
@@ -223,16 +166,11 @@ def get_matrix(all_matrix,order):
                 j = destination + number_next
                 matrix[i][j] = all_matrix[i][j]
                 #print(i,j,matrix[i][j])
-
-
     fp = open("choose_metrix.txt","w+")
     for item in matrix:
         fp.write(str(item)+"\n")
     fp.close()
-
     return matrix
-
-
 
 '''
 上一阶段导入的矩阵是所有的距离，在规定了顺序之后自动生成可以到的和不可到的之间的不同方式
@@ -249,7 +187,6 @@ def all_in_all(order,root):
     # pattern = re.compile(p)
     # order = pattern.findall(input_order)
     root = root
-
     metrix,raw,price_raw,movie,movie_we = get_allmatrix(order,root)
     f = open("metrix.txt")
     all_matrix = f.read()
