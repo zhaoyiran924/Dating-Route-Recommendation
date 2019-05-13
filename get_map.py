@@ -1,3 +1,5 @@
+#This code use Baidu_Map and addresses we searched to get the route of date and store in Baidu_Map.txt
+
 #-*- coding:utf-8 -*-
 import requests
 import json
