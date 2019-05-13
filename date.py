@@ -1,3 +1,5 @@
+#This code is used to create an interface surface
+
 # -*- coding: utf-8 -*-
 from tkinter import *
 from PIL import Image, ImageTk
@@ -6,13 +8,11 @@ from get_metrix import all_in_all
 # from tkinter import messagebox
 import time
 
-
 class basedesk():
     def __init__(self,master):
         self.root = master
         self.root.geometry('900x600')
         initface(self.root)
-
 
 #frame1
 class initface():
@@ -29,44 +29,29 @@ class initface():
         # self.theLable.pack(side=LEFT)
         x = 0
         width = 600
-
         dx = 10
-
         self.canvas = Canvas(self.master,width=900,height=600,bg="pink")
         self.canvas.pack()
-
         self.canvas.create_text(x, 100, text="陪你走遍上海每个角落",font=("楷体",30),tag="text")
-
         self.canvas.create_image(100,200,anchor=NW,image=photo)
-
         first_time = time.time()
-
         while True:
             self.canvas.after(100)
             if time.time()-first_time>5:
                 break;
-
             self.canvas.move("text",dx,0)
-
             self.canvas.update()
-
             if x<width:
                 x += dx
-
             else:
                 x=0
                 self.canvas.delete("text")
                 self.canvas.create_text(x,50,"陪你走遍上海每个角落",tag="text")
-
-
-
-
         #frame1 实现开始界面
         #开始运行get_materix准备所有的数据但是需要准备
         theButton = Button(self.frame1,text="开始我的约会规划",command=self.change)
         theButton.pack()
         mainloop()
-
 
     def change(self,):
         self.frame1.destroy()
@@ -86,39 +71,26 @@ class face1():
         photo = ImageTk.PhotoImage(img)
         #photo.resize(900*400)
         #self.theLable = Label(self.master,text="选择你和TA最想做的事吧，注意顺序哦",justify=LEFT,image=photo,compound=CENTER,font=("楷体",30),fg="blue")
-
         x = 0
         width = 600
-
-        dx = 10
-
+        dx = 10        
         self.canvas = Canvas(self.master,width=900,height=600,bg="pink")
         self.canvas.pack()
-
         self.canvas.create_text(x, 100, text="选择你和TA最想做的事吧，注意顺序哦",font=("楷体",30),tag="text")
-
         self.canvas.create_image(0,200,anchor=NW,image=photo)
-
         first_time = time.time()
-
         while True:
             if time.time()-first_time>5:
                 break;
             self.canvas.after(100)
-
             self.canvas.move("text",dx,0)
-
             self.canvas.update()
-
             if x<width:
                 x += dx
-
             else:
                 x=0
                 self.canvas.delete("text")
                 self.canvas.create_text(x,50,"选择你和TA最想做的事吧，注意顺序哦",tag="text")
-
-
         Button1 = Button(self.frame2,text="美食",command=lambda:self.count(0))
         Button1.pack()
         Button2 = Button(self.frame2,text="电影",command=lambda:self.count(1))
@@ -144,7 +116,6 @@ class face1():
         self.canvas.pack_forget()
         print("destroy")
         all_in_all(self.order,self.master)
-
 
 
 if __name__=='__main__':
