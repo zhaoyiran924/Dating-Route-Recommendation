@@ -1,3 +1,5 @@
+This txt file stores riding scheme of dating route we found
+
 公交车乘车方案
 到达时间：2019-03-27 01:24:48
 票价：3
